@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>JOIA Paraíso - Gala Night</title>
+    <title>MINIGOLF</title>
     <style>
         :root {
             --fondo-joia: #17505a;
             --crema-joia: #e7dac5;
             --azul-oscuro: #0f353d;
             --dorado-borde: #a68966;
-            --overlay-top: rgba(23, 80, 90, 0.538);
-            --overlay-bottom: rgba(15, 53, 61, 0.8);
         }
 
         /* RESET */
@@ -30,16 +28,6 @@
             background: #ffffff;
         }
 
-        /* BACKGROUND SLIDES */
-        .bg-slider {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-            display: none;
-        }
-
         .main-viewport {
             position: relative;
             z-index: 6;
@@ -48,9 +36,13 @@
             justify-content: center;
             align-items: center;
             padding: 2vmin;
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            max-height: 100vh;
             transition: transform 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         /* HEADER */
@@ -60,105 +52,21 @@
             flex-direction: column;
             align-items: center;
             color: #000000;
-            width: clamp(150px, 15vw, 250px);
+            width: 100%;
             flex-shrink: 0;
         }
 
-        /* STAR WRAP */
-        .star-wrap {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 10px;
-            width: auto;
-            height: clamp(40px, 8vh, 120px);
-            z-index: 10;
-            pointer-events: auto;
-        }
-        .star-wrap::before {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%) scale(1.05);
-            width: 120%;
-            height: 120%;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            filter: blur(10px) brightness(2);
-            opacity: 0;
-            transition: filter 320ms ease, opacity 320ms ease, transform 320ms ease;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .star-wrap img.logo-estrella {
-            position: relative;
-            display: block;
-            width: auto;
-            height: 100%;
-            z-index: 1;
-            filter: brightness(0) invert(1);
-            transition: transform 800ms cubic-bezier(.22,.9,.3,1), filter 260ms ease;
-        }
-
-        /* hover / glow state */
-        .star-wrap:hover::before,
-        .star-wrap.glow::before {
-            filter: blur(16px) brightness(2.0);
-            transform: translate(-50%, -50%) scale(1.12);
-            opacity: 0.85;
-        }
-        .star-wrap:hover img.logo-estrella,
-        .star-wrap.glow img.logo-estrella {
-            transform: rotate(220deg) scale(1.12);
-        }
-
-        /* intro: show halo during intro animation only */
-        .star-wrap.intro::before {
-            opacity: 0.85;
-            filter: blur(14px) brightness(1.9);
-            transform: translate(-50%, -50%) scale(1.10);
-        }
-        .star-wrap.intro img.logo-estrella {
-            animation: starIntro 2000ms cubic-bezier(.22,.9,.3,1) both;
-        }
-        @keyframes starIntro {
-            from { transform: scale(0.6) rotate(0deg); opacity: 0; }
-            60% { transform: scale(1.05) rotate(360deg); opacity: 1; }
-            to { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        /* RESTO DEL LAYOUT */
+        /* TITULO */
         .joia-tit {
             font-weight: 300;
-            font-size: clamp(45px, 5vw, 90px);
+            font-size: clamp(45px, 8vw, 90px);
             line-height: 0.8;
             margin: 0;
             width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             color: #000000;
-        }
-        .paraiso-tit {
-            font-size: clamp(14px, 1.4vw, 26px);
-            margin: 8px 0 2px 0;
-            font-weight: bold;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            letter-spacing: 0.3em;
-            color: #000000;
-        }
-        .by-tit {
-            font-size: clamp(10px, 1vw, 18px);
-            margin: 0;
-            font-weight: bold;
-            text-transform: uppercase;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            letter-spacing: 0.2em;
-            color: #000000;
+            letter-spacing: 2px;
         }
 
         .container {
@@ -170,8 +78,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
             max-width: 95vw;
-            max-height: 65vh;
+            max-height: 50vh;
             position: relative;
             z-index: 7;
             overflow: visible;
@@ -185,8 +94,8 @@
         }
 
         .gala-card {
-            width: clamp(300px, 35vw, 600px);
-            height: clamp(400px, 55vh, 700px);
+            width: clamp(250px, 80vw, 500px);
+            height: clamp(300px, 70vh, 600px);
             background: #fff;
             border-radius: clamp(10px, 1.5vw, 20px);
             overflow: hidden;
@@ -211,9 +120,11 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            filter: blur(20%);
             transform: scale(1);
         }
         .gala-card:hover img {
+            filter: blur(0%);
             transform: scale(1.03);
         }
 
@@ -224,36 +135,25 @@
         .instrucciones {
             margin-top: clamp(15px, 3vh, 30px);
             color: rgba(0, 0, 0, 0.85);
-            font-size: clamp(14px, 1vw, 14px);
+            font-size: clamp(12px, 1.5vw, 14px);
             letter-spacing: 1px;
             text-transform: uppercase;
             text-align: center;
             z-index: 6;
+            padding: 0 10px;
         }
 
         @media (max-width: 720px) {
-            .gala-card { width: 44vw; }
-            .gala-card:hover { width: 72vw; }
-            .container { max-height: 80vh; padding: 4vmin; }
+            .gala-card { width: 90vw; }
+            .gala-card:hover { width: 90vw; }
+            .container { max-height: 60vh; padding: 4vmin; }
         }
-
-        :root { --slide-duration: 10s; }
     </style>
 </head>
 <body>
-    <!-- BACKGROUND SLIDER -->
-    <div class="bg-slider" id="bgSlider" aria-hidden="true"></div>
-
-    <div class="main-viewport" role="main" aria-label="Gala landing">
+    <div class="main-viewport" role="main" aria-label="MINIGOLF landing">
         <div class="header-joia">
-            <div class="star-wrap" id="starWrap" aria-hidden="false">
-                <img id="starLogo" class="logo-estrella" alt="estrella Joia"
-                     src="https://i.imgur.com/jXCqCpg.png"
-                     onerror="console.warn('Star image load failed');">
-            </div>
-
-            <div class="joia-tit"><span>J</span><span>O</span><span>I</span><span>A</span></div>
-            <div class="paraiso-tit"><span>P</span><span>A</span><span>R</span><span>A</span><span>Í</span><span>S</span><span>O</span></div>
+            <div class="joia-tit">MINIGOLF</div>
         </div>
 
         <div class="container">
@@ -272,34 +172,7 @@
 
     <script>
     (function () {
-        const starWrap = document.getElementById('starWrap');
-        const starImg = document.getElementById('starLogo');
-
-        function applyPseudoBackground() {
-            if (!starWrap || !starImg) return;
-            const src = starImg.getAttribute('src') || '';
-            let styleEl = document.getElementById('starPseudoStyle');
-            const rule = `.star-wrap::before { background-image: url("${src}"); }`;
-            if (!styleEl) {
-                styleEl = document.createElement('style');
-                styleEl.id = 'starPseudoStyle';
-                styleEl.innerHTML = rule;
-                document.head.appendChild(styleEl);
-            } else {
-                styleEl.innerHTML = rule;
-            }
-        }
-
-        applyPseudoBackground();
-        starImg.addEventListener('load', applyPseudoBackground);
-        starImg.addEventListener('error', () => { console.warn('Star image failed to load; glow may not appear.'); });
-
-        window.addEventListener('load', () => {
-            starWrap.classList.add('intro');
-            setTimeout(()=> starWrap.classList.remove('intro'), 1000);
-        });
-        starWrap.addEventListener('mouseenter', () => starWrap.classList.add('glow'));
-        starWrap.addEventListener('mouseleave', () => starWrap.classList.remove('glow'));
+        // No scripts needed - all removed
     })();
     </script>
 </body>
