@@ -27,38 +27,24 @@
             height: 100vh;
             width: 100vw;
             position: relative;
-            background: #071617;
+            background-image: url("https://lh3.googleusercontent.com/d/1GXSFwIlHcvNQwFp_XdZGk34XnEvKoty1");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
-        /* BACKGROUND SLIDES */
+        /* BACKGROUND SLIDES - REMOVED */
         .bg-slider {
             position: fixed;
             inset: 0;
             z-index: 0;
             pointer-events: none;
             overflow: hidden;
+            display: none;
         }
         .bg-slide {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0;
-            transition: opacity 1s ease;
-            transform-origin: center center;
-            will-change: transform, opacity;
-            z-index: 1;
-            /* default no filter; the JS will add .distort on active slides */
-            filter: none;
-        }
-        .bg-slide.active {
-            opacity: 1;
-            animation: zoomIn var(--slide-duration) linear forwards;
-        }
-        .bg-slide.distort {
-            /* apply our SVG displacement filter */
-            filter: url(#cushionDistort);
+            display: none;
         }
 
         .bg-overlay {
@@ -68,10 +54,6 @@
             mix-blend-mode: normal;
             pointer-events: none;
             z-index: 2;
-        }
-        @keyframes zoomIn {
-            from { transform: scale(1.02); }
-            to   { transform: scale(1.07); }
         }
 
         .main-viewport {
@@ -84,7 +66,6 @@
             padding: 2vmin;
             max-width: 100%;
             max-height: 100%;
-            transition: transform 0.3s ease;
         }
 
         /* HEADER */
@@ -98,9 +79,7 @@
             flex-shrink: 0;
         }
 
-        /* STAR WRAP: contenedor que genera el glow detrás con pseudo-elemento.
-           El pseudo-elemento usa la misma imagen como background para respetar la forma (no rectángulo).
-           Por defecto el halo está oculto (opacity:0). Aparece en hover y durante la intro (rotación). */
+        /* STAR WRAP */
         .star-wrap {
             position: relative;
             display: inline-block;
@@ -122,8 +101,7 @@
             background-position: center;
             background-size: contain;
             filter: blur(10px) brightness(2);
-            opacity: 0; /* oculto por defecto */
-            transition: filter 320ms ease, opacity 320ms ease, transform 320ms ease;
+            opacity: 0;
             z-index: 0;
             pointer-events: none;
         }
@@ -133,11 +111,10 @@
             width: auto;
             height: 100%;
             z-index: 1;
-            filter: brightness(0) invert(1); /* estrella blanca */
-            transition: transform 800ms cubic-bezier(.22,.9,.3,1), filter 260ms ease;
+            filter: brightness(0) invert(1);
         }
 
-        /* hover / glow state: muestra halo y rota estrella */
+        /* hover / glow state */
         .star-wrap:hover::before,
         .star-wrap.glow::before {
             filter: blur(16px) brightness(2.0);
@@ -149,22 +126,7 @@
             transform: rotate(220deg) scale(1.12);
         }
 
-        /* intro: show halo during intro animation only */
-        .star-wrap.intro::before {
-            opacity: 0.85;
-            filter: blur(14px) brightness(1.9);
-            transform: translate(-50%, -50%) scale(1.10);
-        }
-        .star-wrap.intro img.logo-estrella {
-            animation: starIntro 2000ms cubic-bezier(.22,.9,.3,1) both;
-        }
-        @keyframes starIntro {
-            from { transform: scale(0.6) rotate(0deg); opacity: 0; }
-            60% { transform: scale(1.05) rotate(360deg); opacity: 1; }
-            to { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        /* RESTO DEL LAYOUT (sin cambios significativos) */
+        /* RESTO DEL LAYOUT */
         .joia-tit {
             font-weight: 300;
             font-size: clamp(45px, 5vw, 90px);
@@ -245,38 +207,7 @@
         }
 
         .img-wrapper { width: 100%; height: 100%; overflow: hidden; }
-        .gala-flex:hover .gala-card:not(:hover) {
-            filter: brightness(0.6) grayscale(0.3);
-            transform: scale(0.92);
-            opacity: 0.8;
-        }
 
-        .gala-card {
-            width: clamp(100px, 12vw, 180px);
-            height: clamp(250px, 45vh, 500px);
-            background: #fff;
-            border-radius: clamp(10px, 1.5vw, 20px);
-            overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: grab;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
-        }
-        .gala-card:hover {
-            width: clamp(250px, 28vw, 450px);
-            transform: translateY(-30px) scale(1.05) !important;
-            z-index: 999; /* sobresale por encima de todo */
-            box-shadow: 0 50px 90px rgba(0,0,0,0.45), 0 0 18px rgba(255,255,255,0.12);
-            filter: brightness(1.06) !important;
-            opacity: 1 !important;
-        }
-
-        .img-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
         .gala-card img {
             width: 100%;
             height: 100%;
@@ -324,27 +255,15 @@
             .container { max-height: 80vh; padding: 4vmin; }
         }
 
-        :root { --slide-duration: 10s; }
+        :root { --slide-duration: 0s; }
     </style>
-
-    <!-- SVG filter defs for cushion/distortion effect -->
-    <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:visible;">
-        <filter id="cushionDistort" filterUnits="objectBoundingBox" x="-20%" y="-20%" width="140%" height="140%">
-            <!-- turbulence node, will be animated by JS -->
-            <feTurbulence id="turb" baseFrequency="0.0015 0.002" numOctaves="2" seed="3" stitchTiles="stitch" result="noise"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-    </svg>
 </head>
 <body>
-    <!-- BACKGROUND SLIDER -->
-    <div class="bg-slider" id="bgSlider" aria-hidden="true">
-        <div class="bg-overlay" aria-hidden="true"></div>
-    </div>
+    <!-- BACKGROUND SLIDER - REMOVED -->
+    <div class="bg-slider" id="bgSlider" aria-hidden="true"></div>
 
     <div class="main-viewport" role="main" aria-label="Gala landing">
         <div class="header-joia">
-            <!-- star-wrap: pseudo-element uses same image as background to create shaped glow -->
             <div class="star-wrap" id="starWrap" aria-hidden="false">
                 <img id="starLogo" class="logo-estrella" alt="estrella Joia"
                      src="https://i.imgur.com/jXCqCpg.png"
@@ -353,7 +272,7 @@
 
             <div class="joia-tit"><span>J</span><span>O</span><span>I</span><span>A</span></div>
             <div class="paraiso-tit"><span>P</span><span>A</span><span>R</span><span>A</span><span>Í</span><span>S</span><span>O</span></div>
-            <div class="by-tit"><span>B</span><span>Y</span><span> </span><span>I</span><span>B</span><span>E</span><span>R</span><span>O</span><span>S</span><span>T</span><span>A</span><span>R</span></div>
+            <div class="by-tit"><span>B</span><span>Y</span><span> </span><span>I</span><span>B</span><span>E</span><span>R</span><span>O</span><span>S</span><span>T</span><span>A</span><span>R</span></div>
         </div>
 
         <div class="container">
@@ -382,7 +301,7 @@
         </div>
 
         <div class="instrucciones">
-            Pasa el cursor para ver la imagen y arrastra sin soltar a la bandeja de la APP
+            Arrastra y suelta en la bandeja de la app donde se cargan los archivos
         </div>
     </div>
 
@@ -394,7 +313,6 @@
         function applyPseudoBackground() {
             if (!starWrap || !starImg) return;
             const src = starImg.getAttribute('src') || '';
-            // create/replace style rule for pseudo to set same background-image
             let styleEl = document.getElementById('starPseudoStyle');
             const rule = `.star-wrap::before { background-image: url("${src}"); }`;
             if (!styleEl) {
@@ -411,100 +329,9 @@
         starImg.addEventListener('load', applyPseudoBackground);
         starImg.addEventListener('error', () => { console.warn('Star image failed to load; glow may not appear.'); });
 
-        // intro: show halo only during startup animation, then remove 'intro' class to hide halo
-        window.addEventListener('load', () => {
-            starWrap.classList.add('intro');
-            // keep intro halo visible while animation runs, then remove intro class so halo is off
-            setTimeout(()=> starWrap.classList.remove('intro'), 1000);
-        });
         // hover: add/remove 'glow' (this also triggers halo)
         starWrap.addEventListener('mouseenter', () => starWrap.classList.add('glow'));
         starWrap.addEventListener('mouseleave', () => starWrap.classList.remove('glow'));
-
-        // SLIDER + cushion distortion
-        const slideDurationMs = 10000;
-        const fadeDurationMs = 1000;
-        const slidesRoot = document.getElementById('bgSlider');
-
-        const rawUrls = [
-            "https://iberostar-949.vmwareidentity.de/SAAS/jersey/manager/api/images/u/c0e633b8-3f59-44da-89df-5f0da55a921c",
-            "//apiimg.iberostar.com/uploads/image/86577/crops/16:9/1920/image",
-            "//apiimg.iberostar.com/uploads/image/88245/crops/16:9/1920/image.jpeg",
-            "//apiimg.iberostar.com/uploads/image/88238/crops/16:9/1920/image.jpeg",
-            "//apiimg.iberostar.com/uploads/image/88341/crops/16:9/1920/image.jpeg",
-            "//apiimg.iberostar.com/uploads/image/88248/crops/16:9/1920/image.jpeg",
-            "//apiimg.iberostar.com/uploads/image/88246/crops/16:9/1920/image.jpeg",
-            "//apiimg.iberostar.com/uploads/image/83405/crops/3:2/image.jpg",
-            "https://cdn.hotelverse.tech/installationimages/h_3a86135c-2026-4b37-acf8-79105e5bd0d5/i_9547/028eb01f-3580-4168-985d-28e7133b12a8/original.webp",
-            "https://cdn.hotelverse.tech/installationimages/h_3a86135c-2026-4b37-acf8-79105e5bd0d5/i_9543/e80ebfe0-10ca-4783-80e2-e9e739dedb72/original.webp",
-            "//apiimg.iberostar.com/uploads/image/68315/crops/16:9/392/image.jpeg"
-        ];
-        const normUrls = rawUrls.map(u => u.startsWith('//') ? 'https:' + u : u);
-        const urls = Array.from(new Set(normUrls));
-        const slides = [];
-
-        function createSlide(url) {
-            const div = document.createElement('div');
-            div.className = 'bg-slide';
-            div.style.backgroundImage = `url("${url}")`;
-            const seconds = (slideDurationMs / 1000).toFixed(2) + 's';
-            div.style.setProperty('--slide-duration', seconds);
-            slidesRoot.appendChild(div);
-            slides.push(div);
-        }
-
-        function preloadAll(list) {
-            return Promise.all(list.map(u => new Promise(resolve => {
-                const img = new Image();
-                img.onload = () => resolve({url: u, ok:true});
-                img.onerror = () => resolve({url: u, ok:false});
-                setTimeout(() => { if (!img.complete) img.src = u; }, 10);
-                img.src = u;
-            })));
-        }
-
-        preloadAll(urls).then(results => {
-            const goodUrls = results.map(r => r.url);
-            goodUrls.forEach(u => createSlide(u));
-            if (!slides.length) return;
-
-            // active slide + add distort class
-            let current = 0;
-            slides[current].classList.add('active', 'distort');
-
-            // cycle slides, ensure only active has .distort to minimize filter cost
-            setInterval(() => {
-                const prev = current;
-                current = (current + 1) % slides.length;
-                slides[current].classList.add('active','distort');
-                // fade previous out
-                setTimeout(() => {
-                    slides[prev].classList.remove('active','distort');
-                    // reset animation so zoom restarts next time
-                    slides[prev].style.animation = 'none';
-                    void slides[prev].offsetWidth;
-                    slides[prev].style.animation = '';
-                }, fadeDurationMs);
-            }, slideDurationMs);
-        });
-
-        // Animate turbulence baseFrequency for subtle cushion distortion
-        const turb = document.getElementById('turb');
-        if (turb) {
-            let start = performance.now();
-            function tick(now) {
-                const t = (now - start) / 1000;
-                // base frequency oscillates slowly; values kept small for subtle effect
-                const bf = 0.0008 + Math.sin(t * 0.45) * 0.0006; // vary between ~0.0002..0.0014
-                const bfY = bf * 1.2;
-                try { turb.setAttribute('baseFrequency', `${Math.abs(bf)} ${Math.abs(bfY)}`); }
-                catch(e) {}
-                requestAnimationFrame(tick);
-            }
-            requestAnimationFrame(tick);
-        }
-
-        slidesRoot.setAttribute('aria-hidden', 'true');
     })();
     </script>
 </body>
